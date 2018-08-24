@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Draggable - Default functionality</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <style>
+  #draggable,#draggable2 { width: 180px; height: 180px; padding: 0.5em; background: aliceblue; border: black; }
+  body{background: gray;}
+/* .chart { height: 600px; width: 900px; margin: 5px; margin: 15px auto; border: 3px solid #DDD; border-radius: 3px; }
+.comments { width: 427px; margin: 15px auto; } */
+  </style>
+
+</head>
+<body >
+  <div class="comments">
+   
+<div id="draggable" class="ui-widget-content">
+    <div class="clickable">
+  <p>
+    <h2 style="text-align:center;">reply-reply</h2>
+    <ul style=" list-style: none; ">
+        <li>idtabla-re</li>
+        <li>nombretabla</li>
+        <li>idtabla</li>
+        <li>nombretabla</li>
+        <li>idtabla</li>
+        <li>nombretabla</li>
+    </ul>
+</p>
+</div>
+</div>
+ <br>
+
+<div id="draggable2" class="ui-widget-content">
+    <div class="clickable">
+  <p>
+    <h2 style="text-align:center;">reply</h2>
+    <ul style=" list-style: none; ">
+        <li>idtabla-</li>
+        <li>nombretabla</li>
+        <li>idtabla</li>
+        <li>nombretabla</li>
+        <li>idtabla</li>
+        <li>nombretabla</li>
+    </ul>
+  </div>
+</p>
+
+</div>
+
+
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "#draggable" ).draggable();
+    $( "#draggable" ).draggable({ });
+
+    $('.clickable').click(function (event) {
+      alert('hola');
+    });
+  } );
+  </script>
+</div>
+
+  <div class="chart" id="OrganiseChart8"></div>
+</body>
+</html>
