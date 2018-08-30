@@ -1,0 +1,163 @@
+
+        [HttpPost]
+        public ActionResult SaveUsuFurat(string tipDoc, string numDoc, string nombres, string apellid, string sapellido, string nomArl, string codArl, string snombre, string nomfile)
+        {
+            try
+            {
+                //Guarda el archivo en BD
+                byte[] Imagen = null;
+                string FolderLoad = System.Web.Hosting.HostingEnvironment.MapPath("~/FileRepo");
+                string carp = FolderLoad + "\\" + (nomfile.Split(new String[] { "FileRepo" }, StringSplitOptions.None)[1]).Split('\\')[1].ToString();
+
+                string[] fileEntries = Directory.GetFiles(carp);
+                string filename = "";
+
+                foreach (var item in fileEntries)
+                {
+                    FileInfo finfo = new FileInfo(item);
+
+                    FileStream fileStream = new FileStream(item, FileMode.Open, FileAccess.Read);
+                    BinaryReader brFile = new BinaryReader(fileStream);
+                    Imagen = brFile.ReadBytes((int)finfo.Length);
+
+                }
+
+                string mensaje;
+                if (db.SaveUsuFurat(Convert.ToInt16(tipDoc), Convert.ToInt64(numDoc), nombres, apellid, sapellido, nomArl, codArl, snombre, Imagen, out mensaje))
+                {
+                    return Json(new
+                    {
+                        Result = "OK"
+                    });
+                }
+                else
+                {
+                    //TODO: Log del error
+                    return Json(new
+                    {
+                        Result = "ERROR",
+                        Message = mensaje.StartsWith("Msj: ") ? mensaje : "Ocurrió un error intentando guardar el registro"
+                    });
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    Result = "ERROR",
+                    Message = "Ocurrió un error intentando guardar la usuario"
+                });
+            }
+        }
+        
+        
+        
+        
+        convertir archivp
+        
+        
+        eliminarlo 
+        
+        
+         [HttpPost]
+        public ActionResult PostFileUploadHead()
+        {
+
+            string folder = "";
+            if (Request.Files.Count > 0)
+            {
+                var file = Request.Files[0];
+
+                Guid Identifica = new Guid();
+                Identifica = Guid.NewGuid();
+
+                if (file != null && file.ContentLength > 0)
+                {
+                    var fileName = Path.GetFileName(file.FileName);
+                    string Foldertarget = Identifica.ToString();
+                    folder = System.Web.Hosting.HostingEnvironment.MapPath("~/FileRepo") + "\\" + Foldertarget;
+
+                    if (this.CreateFolderIfNeeded(folder))
+                    {
+                        var path = Path.Combine(folder, fileName);
+                        folder = "FileRepo\\" + Foldertarget + "\\" + fileName;
+                        file.SaveAs(path);
+                    }
+                }
+            }
+
+            return Json(new
+            {
+                Result = "OK",
+                Message = folder
+            });
+
+            //string FolderLoad = "";
+            //try
+            //{
+            //    Guid Identifica = new Guid();
+            //    Identifica = Guid.NewGuid();
+            //    if (HttpContext.Current.Request.Files.AllKeys.Any())
+            //    {
+            //        var httpPostedFile = HttpContext.Current.Request.Files["input-700"];
+            //        if (httpPostedFile != null)
+            //        {
+            //            string Foldertarget = Identifica.ToString();
+            //            FolderLoad = System.Web.Hosting.HostingEnvironment.MapPath("~/FileRepo") + "\\" + Foldertarget;
+            //            if (this.CreateFolderIfNeeded(FolderLoad))
+            //            {
+            //                httpPostedFile.SaveAs(Path.Combine(FolderLoad, httpPostedFile.FileName));
+            //                FolderLoad = "FileRepo\\" + Foldertarget + "\\" + httpPostedFile.FileName;
+            //            }
+            //        }
+            //    }
+
+            //    return Ok(FolderLoad);
+            //}
+            //catch (Exception ex)
+            //{
+            //    return Ok(ex.Message);
+
+            //}
+        }
+        [HttpPost]
+        public ActionResult PostFileUploadHeadDelete(string doc)
+        {
+            try
+            {
+
+                if (doc.Length > 0)
+                {
+                    string Name = doc.Split('\\')[2];
+                    string foldername = doc.Split('\\')[1];
+                    var fileName = Path.GetFileName(Name);
+                    string folder = System.Web.Hosting.HostingEnvironment.MapPath("~/FileRepo") + "\\" + foldername;
+                    if (fileName != null || fileName != string.Empty)
+                    {
+                        var path = Path.Combine(folder, fileName);
+                        var directory = Path.GetDirectoryName(path);
+                        System.IO.File.Delete(path);
+                        Directory.Delete(directory);
+
+                    }
+                }
+
+                return Json(new
+                {
+                    Result = true,
+                    Message = "Se elimino correctamente"
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    Result = false,
+                    Message = "Ocurrió un error intentando eliminar el archivo"
+                });
+            }
+
+        }
+        
+        
